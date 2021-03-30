@@ -12,7 +12,7 @@ class ServiceProvider extends FoundationProvider
     protected function _register(): void
     {
         $router = Route::getFacadeRoot();
-        $router->get('/xw/js/defaults.js', JavascriptAssetDefaults::class . '::getJavascript');
+        $router->get('/xw/js/defaults', JavascriptAssetDefaults::class . '::getJavascript');
 
         $this->registerAssets();
     }
@@ -20,6 +20,6 @@ class ServiceProvider extends FoundationProvider
     private function registerAssets(): void
     {
         $al = AssetList::getInstance();
-        $al->register('javascript-localized', 'xw/defaults', '/xw/js/defaults.js');
+        $al->register('javascript-localized', 'xw/defaults', '/xw/js/defaults');
     }
 }
