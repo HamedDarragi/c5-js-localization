@@ -6,7 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
-        "xanweb/c5-common": "^1.1"
+        "symfony/polyfill-php80": "^1.20",
+        "xanweb/c5-common": "^1.2"
     },
     "autoload": {
         "psr-4": {
