@@ -32,8 +32,8 @@ class ServiceProvider extends FoundationProvider
         $_locale = Str::lower(str_replace('_', '-', Localization::activeLocale()));
 
         $al = AssetList::getInstance();
-        $al->register('javascript-localized', 'xw/defaults', '/xw/defaults/js');
-        $al->register('javascript-localized', 'xw/backend', '/xw/backend/js');
-        $al->register('javascript-localized', 'xw/frontend', "/xw/{$_locale}/frontend/js");
+        $al->register('javascript-localized', 'xw/defaults', '/xw/defaults/js', ['combine' => false, 'minify' => false]);
+        $al->register('javascript-localized', 'xw/backend', '/xw/backend/js', ['combine' => false, 'minify' => false]);
+        $al->register('javascript-localized', 'xw/frontend', "/xw/{$_locale}/frontend/js", ['combine' => false, 'minify' => false]);
     }
 }
