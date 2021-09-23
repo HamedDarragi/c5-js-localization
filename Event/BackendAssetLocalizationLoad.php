@@ -2,10 +2,10 @@
 
 namespace Xanweb\C5\JsLocalization\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xanweb\C5\JsLocalization\AssetLocalizationCollection;
 
-class BackendAssetLocalizationLoad extends Event
+class BackendAssetLocalizationLoad extends EventDispatcher
 {
     /**
      * Event Name

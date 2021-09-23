@@ -2,9 +2,9 @@
 
 namespace Xanweb\C5\JsLocalization\Config;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class BeforeRenderDefaultAssetJS extends Event
+class BeforeRenderDefaultAssetJS extends EventDispatcher
 {
     /**
      * Event Name
