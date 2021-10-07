@@ -10,10 +10,7 @@ use Xanweb\C5\JsLocalization\AssetLocalizationCollection;
 
 class AssetLocalization extends Controller
 {
-    /**
-     * @var AssetLocalizationCollection
-     */
-    private $assetLocalization;
+    private AssetLocalizationCollection $assetLocalization;
 
     public function on_start()
     {
