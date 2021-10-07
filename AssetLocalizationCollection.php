@@ -40,9 +40,8 @@ class AssetLocalizationCollection extends Collection
         array_walk_recursive($array, static function(&$value) use (&$placeholders) {
             // We don't want to encode passed js functions
             // So we will set placeholders before encoding to restore them after that.
-            /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */
             if (\str_starts_with(\strip_spaces($value), 'function')) {
-                $placeholders['"' . ($placeholder = '__PLACEHOLDER__' . Str::quickRandom(8)) . '"'] = $value;
+                $placeholders['"' . ($placeholder = '__PLACEHOLDER__' . Str::random(8)) . '"'] = $value;
 
                 $value = $placeholder;
             }
