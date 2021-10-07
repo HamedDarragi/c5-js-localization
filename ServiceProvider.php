@@ -8,7 +8,6 @@ use Concrete\Core\Support\Facade\Route;
 use Illuminate\Support\Str;
 use Xanweb\C5\JsLocalization\Controller\Backend\AssetLocalization as BackendAssetLocalization;
 use Xanweb\C5\JsLocalization\Controller\Frontend\AssetLocalization as FrontendAssetLocalization;
-use Xanweb\C5\JsLocalization\Controller\JavascriptAssetDefaults;
 use Xanweb\Common\Routing\Middleware\LocalizedMiddleware;
 use Xanweb\Common\Service\Provider as FoundationProvider;
 
@@ -17,7 +16,6 @@ class ServiceProvider extends FoundationProvider
     protected function _register(): void
     {
         $router = Route::getFacadeRoot();
-        $router->get('/xw/defaults/js', JavascriptAssetDefaults::class . '::getJavascript');
         $router->get('/xw/backend/js', BackendAssetLocalization::class . '::getJavascript');
 
         $router
@@ -32,8 +30,7 @@ class ServiceProvider extends FoundationProvider
         $_locale = Str::lower(str_replace('_', '-', Localization::activeLocale()));
 
         $al = AssetList::getInstance();
-        $al->register('javascript-localized', 'xw/defaults', '/xw/defaults/js', ['combine' => false, 'minify' => false]);
         $al->register('javascript-localized', 'xw/backend', '/xw/backend/js', ['combine' => false, 'minify' => false]);
-        $al->register('javascript-localized', 'xw/frontend', "/xw/{$_locale}/frontend/js", ['combine' => false, 'minify' => false]);
+        $al->register('javascript-localized', 'xw/frontend', "/xw/$_locale/frontend/js", ['combine' => false, 'minify' => false]);
     }
 }
