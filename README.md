@@ -1,4 +1,4 @@
-# Concrete5 Javascript Localization
+# ConcreteCMS Javascript Localization
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/xanweb/c5-js-localization.svg?style=flat-square)](https://packagist.org/packages/xanweb/c5-js-localization)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
@@ -13,14 +13,15 @@ composer require xanweb/c5-js-localization
 
 ## Usage
 
-1- Register `\Xanweb\C5\JsLocalization\ServiceProvider` on package start or include it in `/application/config/app.php`
+Register `\Xanweb\C5\JsLocalization\ServiceProvider` on package start or include it in `/application/config/app.php`
 
-2- Add listener to `BeforeRenderDefaultAssetJS::NAME` on your package start or under `/application/bootstrap/app.php`:
+### For Backend:
+1- Add listener to `BackendAssetLocalizationLoad::NAME` on your package start or under `/application/bootstrap/app.php`:
 ```php
-use Xanweb\C5\JsLocalization\Config\BeforeRenderDefaultAssetJS;
+use Xanweb\C5\JsLocalization\Event\BackendAssetLocalizationLoad;
 
-$this->app['director']->addListener(BeforeRenderDefaultAssetJS::NAME, function (BeforeRenderDefaultAssetJS $event) {
-    $event->getJavascriptAssetDefaults()->mergeWith([
+$this->app['director']->addListener(BackendAssetLocalizationLoad::NAME, function (BackendAssetLocalizationLoad $event) {
+    $event->getAssetLocalization()->mergeWith([
         'i18n' => [
             'confirm' => t('Are you sure?'),
             'maxItemsExceeded' => t('Max items exceeded, you cannot add any more items.'),
@@ -41,14 +42,43 @@ $this->app['director']->addListener(BeforeRenderDefaultAssetJS::NAME, function (
 });
 ```
 
-3- Include the required asset to your view:
+2- Include the required asset to your view:
 ```php
-$view->requireAsset('javascript-localized', 'xw/defaults');
+$view->requireAsset('javascript-localized', 'xw/backend');
 ```
-4- You can now use your data within javascript file:
+3- You can now use your data within javascript file:
 ```javascript
-alert(xanweb.i18n.confirm);
+alert(xw_backend.i18n.confirm);
 
 // Init Editor Example:
-xanweb.editor.initRichTextEditor($('#myTextareaField'));
+xw_backend.editor.initRichTextEditor($('#myTextareaField'));
+```
+
+### For Frontend:
+1- Add listener to `FrontendAssetLocalizationLoad::NAME` on your package start or under `/application/bootstrap/app.php`:
+```php
+use Xanweb\C5\JsLocalization\Event\FrontendAssetLocalizationLoad;
+
+$this->app['director']->addListener(FrontendAssetLocalizationLoad::NAME, function (FrontendAssetLocalizationLoad $event) {
+    $event->getAssetLocalization()->mergeWith([
+        'i18n' => [
+            'message' => t('Are you sure?'),
+        ],
+        'methods' => [
+            'showMessage' => 'function(){ alert("Website: ' . Core::make('site')->getSite()->getSiteName() . '"); }',
+        ],
+    ]);
+});
+```
+
+2- Include the required asset to your view:
+```php
+$view->requireAsset('javascript-localized', 'xw/frontend');
+```
+3- You can now use your data within javascript file:
+```javascript
+alert(xw_frontend.i18n.message);
+
+// Execute function:
+xw_frontend.methods.showMessage();
 ```
