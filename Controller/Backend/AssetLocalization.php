@@ -3,24 +3,23 @@
 namespace Xanweb\C5\JsLocalization\Controller\Backend;
 
 use Concrete\Core\Controller\Controller;
-use Concrete\Core\Http\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Xanweb\C5\JsLocalization\Event\BackendAssetLocalizationLoad;
 use Xanweb\C5\JsLocalization\AssetLocalizationCollection;
+use Xanweb\C5\JsLocalization\Event\BackendAssetLocalizationLoad;
+use Xanweb\C5\JsLocalization\Traits\AssetLocalizationControllerTrait;
 
 class AssetLocalization extends Controller
 {
-    private AssetLocalizationCollection $assetLocalization;
+    use AssetLocalizationControllerTrait;
 
-    public function on_start()
+    public function dispatchEvent(AssetLocalizationCollection $assetLocalization): AssetLocalizationCollection
     {
-        $config = new AssetLocalizationCollection();
         $this->app['director']->dispatch(
             BackendAssetLocalizationLoad::NAME,
-            $event = new BackendAssetLocalizationLoad($config)
+            $event = new BackendAssetLocalizationLoad($assetLocalization)
         );
 
-        $this->assetLocalization = $event->getAssetLocalization();
+        return $event->getAssetLocalization();
     }
 
     public function getJavascript(): Response
@@ -28,19 +27,5 @@ class AssetLocalization extends Controller
         $content = 'window.xw_backend=' . $this->assetLocalization->toJson() . ';';
 
         return $this->createJavascriptResponse($content);
-    }
-
-    private function createJavascriptResponse(string $content): Response
-    {
-        $rf = $this->app->make(ResponseFactoryInterface::class);
-
-        return $rf->create(
-            $content,
-            Response::HTTP_OK,
-            [
-                'Content-Type' => 'application/javascript; charset=' . APP_CHARSET,
-                'Content-Length' => strlen($content),
-            ]
-        );
     }
 }
